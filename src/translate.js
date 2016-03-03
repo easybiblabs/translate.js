@@ -10,15 +10,15 @@
  *       translationKey: 'value123'
  *   }
  * }
- * 
+ *
  * var options = {
  *     // These are the defaults:
  *     debug: false, //[Boolean]: Logs missing translations to console and adds @@-markers around output.
  *     namespaceSplitter: '::' //[String|RegExp]: You can customize the part which splits namespace and translationKeys.
  * }
- * 
+ *
  * var t = libTranslate.getTranslationFunction(messages, [options])
- * 
+ *
  * t('translationKey')
  * t('translationKey', count)
  * t('translationKey', {replaceKey: 'replacevalue'})
@@ -39,6 +39,23 @@
     var isObject = function(obj) { return typeof obj === 'object' && obj !== null; };
     var isString = function(obj) { return Object.prototype.toString.call(obj) === '[object String]'; };
 
+    var deepAccessObject = function(object, keys) {
+      if (!object) {
+        return;
+      }
+
+      // copy the array as we operate on it directly, later
+      keys = keys.slice(0);
+
+      var key = keys.shift();
+      object = object[key];
+
+      if (keys.length > 0) {
+        return deepAccessObject(object, keys);
+      }
+      return object;
+    };
+
     window.libTranslate = {
         getTranslationFunction: function(messageObject, options) {
             options = isObject(options) ? options : {};
@@ -47,19 +64,13 @@
             var namespaceSplitter = options.namespaceSplitter || '::';
 
             function getTranslationValue(translationKey) {
-                if(messageObject[translationKey]) {
-                    return messageObject[translationKey];
-                }
+                var components = translationKey.split(namespaceSplitter);
+                var result = deepAccessObject(messageObject, components);
 
-                var components = translationKey.split(namespaceSplitter); //@todo make this more robust. maybe support more levels?
-                var namespace = components[0];
-                var key = components[1];
-             
-                if(messageObject[namespace] && messageObject[namespace][key]) {
-                    return messageObject[namespace][key];
+                if (!result) {
+                    return null;
                 }
-
-                return null;
+                return result;
             }
 
             function getPluralValue(translation, count) {

@@ -1,5 +1,5 @@
 describe("translate.js", function() {
-	var translationsObject = {
+    var translationsObject = {
         plain: 'I like this.',
         like: 'I like {thing}!',
         simpleCounter: 'The count is {n}.',
@@ -29,191 +29,196 @@ describe("translate.js", function() {
 
         'Prose Key': 'This is prose!',
 
-	    namespaceA: {
-	        plain: 'I like this.',
-	        like: 'I like {thing}!',
-	        simpleCounter: 'The count is {n}.',
-	        hits: {
-	            0: 'No Hits',
-	            1: '{n} Hit',
-	            2: '{n} Hitse',  //some slavic langs have multiple plural forms
-	            3: '{n} Hitses', //some slavic langs have multiple plural forms
-	            n: '{n} Hits'
-	        },
-	        date: {
-	            1: '{day}. January {year}',
-	            2: '{day}. February {year}',
-	            3: '{day}. March {year}',
-	            4: '{day}. April {year}',
-	            5: '{day}. May {year}',
-	            6: '{day}. June {year}',
-	            7: '{day}. July {year}',
-	            8: '{day}. August {year}',
-	            9: '{day}. September {year}',
-	            10: '{day}. October {year}',
-	            11: '{day}. November {year}',
-	            12: '{day}. December {year}'
-	        },
+        namespaceA: {
+            namespaceB: {
+                namespaceC: {
+                    plain: 'I like this.',
+                    like: 'I like {thing}!',
+                    simpleCounter: 'The count is {n}.',
+                    hits: {
+                        0: 'No Hits',
+                        1: '{n} Hit',
+                        2: '{n} Hitse',  //some slavic langs have multiple plural forms
+                        3: '{n} Hitses', //some slavic langs have multiple plural forms
+                        n: '{n} Hits'
+                    },
 
-	        'Prose Key': 'This is prose!'
-	    }
-	}
+                    date: {
+                        1: '{day}. January {year}',
+                        2: '{day}. February {year}',
+                        3: '{day}. March {year}',
+                        4: '{day}. April {year}',
+                        5: '{day}. May {year}',
+                        6: '{day}. June {year}',
+                        7: '{day}. July {year}',
+                        8: '{day}. August {year}',
+                        9: '{day}. September {year}',
+                        10: '{day}. October {year}',
+                        11: '{day}. November {year}',
+                        12: '{day}. December {year}'
+                    },
 
-	var t = libTranslate.getTranslationFunction(translationsObject);
+                    'Prose Key': 'This is prose!'
+                }
+            },
+        }
+    }
 
-	it("should return translationKey if no translation is found", function() {
-		expect(t('nonexistentkey')).toEqual('nonexistentkey');
-	});
+    var t = libTranslate.getTranslationFunction(translationsObject);
 
-	it("should return a translated string", function() {
-		expect(t('plain')).toEqual('I like this.');
-	});
+    it("should return translationKey if no translation is found", function() {
+        expect(t('nonexistentkey')).toEqual('nonexistentkey');
+    });
 
-	it("should return a translated string for prose keys", function() {
-		expect(t('Prose Key')).toEqual('This is prose!');
-	});
+    it("should return a translated string", function() {
+        expect(t('plain')).toEqual('I like this.');
+    });
 
-	it("should return a translated string and replace a placeholder ", function() {
-		expect(t('like', {thing: 'Sun'})).toEqual('I like Sun!');
-	});
+    it("should return a translated string for prose keys", function() {
+        expect(t('Prose Key')).toEqual('This is prose!');
+    });
 
-	it("should return a translated string and show missing placeholders", function() {
-		expect(t('like')).toEqual('I like {thing}!');
-	});
+    it("should return a translated string and replace a placeholder ", function() {
+        expect(t('like', {thing: 'Sun'})).toEqual('I like Sun!');
+    });
 
-	it("should return a translated string and replace a count", function() {
-		expect(t('simpleCounter', 25)).toEqual('The count is 25.');
-	});
+    it("should return a translated string and show missing placeholders", function() {
+        expect(t('like')).toEqual('I like {thing}!');
+    });
 
-	it("should return a translated string with the correct plural form (0)", function() {
-		expect(t('hits', 0)).toEqual('No Hits');
-	});
+    it("should return a translated string and replace a count", function() {
+        expect(t('simpleCounter', 25)).toEqual('The count is 25.');
+    });
 
-	it("should return a translated string with the correct plural form (1)", function() {
-		expect(t('hits', 1)).toEqual('1 Hit');
-	});
+    it("should return a translated string with the correct plural form (0)", function() {
+        expect(t('hits', 0)).toEqual('No Hits');
+    });
 
-	it("should return a translated string with the correct plural form (2)", function() {
-		expect(t('hits', 2)).toEqual('2 Hitse');
-	});
+    it("should return a translated string with the correct plural form (1)", function() {
+        expect(t('hits', 1)).toEqual('1 Hit');
+    });
 
-	it("should return a translated string with the correct plural form (3)", function() {
-		expect(t('hits', 3)).toEqual('3 Hitses');
-	});
+    it("should return a translated string with the correct plural form (2)", function() {
+        expect(t('hits', 2)).toEqual('2 Hitse');
+    });
 
-	it("should return a translated string with the correct plural form (4)", function() {
-		expect(t('hits', 4)).toEqual('4 Hits');
-	});
+    it("should return a translated string with the correct plural form (3)", function() {
+        expect(t('hits', 3)).toEqual('3 Hitses');
+    });
 
-	it("should return a translated string with the correct plural form respecting grater than syntax (100)", function() {
-		expect(t('hits', 100)).toEqual('99+ Hits');
-	});
+    it("should return a translated string with the correct plural form (4)", function() {
+        expect(t('hits', 4)).toEqual('4 Hits');
+    });
 
-	it("should return a translated string with the correct plural form respecting grater than syntax (100)", function() {
-		expect(t('hits', 100)).toEqual('99+ Hits');
-	});
+    it("should return a translated string with the correct plural form respecting grater than syntax (100)", function() {
+        expect(t('hits', 100)).toEqual('99+ Hits');
+    });
 
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, replacements, count)", function() {
-		expect(t('date', {day: '13', year: 2014}, 2)).toEqual('13. February 2014');
-	});
+    it("should return a translated string with the correct plural form respecting grater than syntax (100)", function() {
+        expect(t('hits', 100)).toEqual('99+ Hits');
+    });
 
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements)", function() {
-		expect(t('date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
-	});
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, replacements, count)", function() {
+        expect(t('date', {day: '13', year: 2014}, 2)).toEqual('13. February 2014');
+    });
 
-	it("should return a translated string with the correct plural form respecting grater than syntax and replaced placeholders: t(key, replacements, count)", function() {
-		expect(t('date', {year: 2014}, 13)).toEqual('The year 2014 didn\'t end as expected');
-	});
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements)", function() {
+        expect(t('date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
+    });
 
-	//every thing with namespace support
-	it("should return a translated string [namespace support]", function() {
-		expect(t('namespaceA::plain')).toEqual('I like this.');
-	});
+    it("should return a translated string with the correct plural form respecting grater than syntax and replaced placeholders: t(key, replacements, count)", function() {
+        expect(t('date', {year: 2014}, 13)).toEqual('The year 2014 didn\'t end as expected');
+    });
 
-	it("should return a translated string for prose keys  [namespace support]", function() {
-		expect(t('namespaceA::Prose Key')).toEqual('This is prose!');
-	});
+    //every thing with namespace support
+    it("should return a translated string [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::plain')).toEqual('I like this.');
+    });
 
-	it("should return a translated string and replace a placeholder  [namespace support]", function() {
-		expect(t('namespaceA::like', {thing: 'Sun'})).toEqual('I like Sun!');
-	});
+    it("should return a translated string for prose keys  [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::Prose Key')).toEqual('This is prose!');
+    });
 
-	it("should return a translated string and show missing placeholders [namespace support]", function() {
-		expect(t('namespaceA::like')).toEqual('I like {thing}!');
-	});
+    it("should return a translated string and replace a placeholder  [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::like', {thing: 'Sun'})).toEqual('I like Sun!');
+    });
 
-	it("should return a translated string and replace a count [namespace support]", function() {
-		expect(t('namespaceA::simpleCounter', 25)).toEqual('The count is 25.');
-	});
+    it("should return a translated string and show missing placeholders [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::like')).toEqual('I like {thing}!');
+    });
 
-	it("should return a translated string with the correct plural form (0) [namespace support]", function() {
-		expect(t('namespaceA::hits', 0)).toEqual('No Hits');
-	});
+    it("should return a translated string and replace a count [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::simpleCounter', 25)).toEqual('The count is 25.');
+    });
 
-	it("should return a translated string with the correct plural form (1) [namespace support]", function() {
-		expect(t('namespaceA::hits', 1)).toEqual('1 Hit');
-	});
+    it("should return a translated string with the correct plural form (0) [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::hits', 0)).toEqual('No Hits');
+    });
 
-	it("should return a translated string with the correct plural form (2) [namespace support]", function() {
-		expect(t('namespaceA::hits', 2)).toEqual('2 Hitse');
-	});
+    it("should return a translated string with the correct plural form (1) [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::hits', 1)).toEqual('1 Hit');
+    });
 
-	it("should return a translated string with the correct plural form (3) [namespace support]", function() {
-		expect(t('namespaceA::hits', 3)).toEqual('3 Hitses');
-	});
+    it("should return a translated string with the correct plural form (2) [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::hits', 2)).toEqual('2 Hitse');
+    });
 
-	it("should return a translated string with the correct plural form (4) [namespace support]", function() {
-		expect(t('namespaceA::hits', 4)).toEqual('4 Hits');
-	});
+    it("should return a translated string with the correct plural form (3) [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::hits', 3)).toEqual('3 Hitses');
+    });
 
-	it("should return a translated string with the correct plural form respecting grater than syntax (100) [namespace support]", function() {
-		expect(t('hits', 100)).toEqual('99+ Hits');
-	});
+    it("should return a translated string with the correct plural form (4) [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::hits', 4)).toEqual('4 Hits');
+    });
 
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, replacements, count) [namespace support]", function() {
-		expect(t('namespaceA::date', {day: '13', year: 2014}, 2)).toEqual('13. February 2014');
-	});
+    it("should return a translated string with the correct plural form respecting grater than syntax (100) [namespace support]", function() {
+        expect(t('hits', 100)).toEqual('99+ Hits');
+    });
 
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support]", function() {
-		expect(t('namespaceA::date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
-	});
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, replacements, count) [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::date', {day: '13', year: 2014}, 2)).toEqual('13. February 2014');
+    });
 
-	//every thing with namespace support + custom namespace splitter
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support]", function() {
+        expect(t('namespaceA::namespaceB::namespaceC::date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
+    });
 
-	var t1 = libTranslate.getTranslationFunction(translationsObject, {namespaceSplitter: new RegExp('\\.')});
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + RegExp splitter]", function() {
-		expect(t1('namespaceA.date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
-	});
+    //every thing with namespace support + custom namespace splitter
 
-	var t2 = libTranslate.getTranslationFunction(translationsObject, {namespaceSplitter: /\./});
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + Inline RegExp splitter]", function() {
-		expect(t2('namespaceA.date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
-	});
+    var t1 = libTranslate.getTranslationFunction(translationsObject, {namespaceSplitter: new RegExp('\\.')});
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + RegExp splitter]", function() {
+        expect(t1('namespaceA.namespaceB.namespaceC.date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
+    });
 
-	var t3 = libTranslate.getTranslationFunction(translationsObject, {namespaceSplitter: '.'});
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + String splitter]", function() {
-		expect(t3('namespaceA.date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
-	});
+    var t2 = libTranslate.getTranslationFunction(translationsObject, {namespaceSplitter: /\./});
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + Inline RegExp splitter]", function() {
+        expect(t2('namespaceA.namespaceB.namespaceC.date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
+    });
 
-	//wrong arguments
-	var t4 = libTranslate.getTranslationFunction(translationsObject, 'asd');
-	it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + wrong options arg]", function() {
-		expect(t4('namespaceA::date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
-	});
+    var t3 = libTranslate.getTranslationFunction(translationsObject, {namespaceSplitter: '.'});
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + String splitter]", function() {
+        expect(t3('namespaceA.namespaceB.namespaceC.date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
+    });
 
-
-	//debug enabled
-	var t5 = libTranslate.getTranslationFunction(translationsObject, {debug: true});
-	it("should return @@translationKey@@ if no translation is found and debug is true", function() {
-		expect(t5('nonexistentkey')).toEqual('@@nonexistentkey@@');
-	});
-
-	it("should return @@translationKey@@ if no translation is found [namespace support]", function() {
-		expect(t5('namespaceA::nonexistentkey')).toEqual('@@namespaceA::nonexistentkey@@');
-	});
+    //wrong arguments
+    var t4 = libTranslate.getTranslationFunction(translationsObject, 'asd');
+    it("should return a translated string with the correct plural form and replaced placeholders: t(key, count, replacements) [namespace support + wrong options arg]", function() {
+        expect(t4('namespaceA::namespaceB::namespaceC::date', 2, {day: '13', year: 2014})).toEqual('13. February 2014');
+    });
 
 
-	// it("should return ", function() {
-	// 	expect(t()).toEqual();
-	// });
+    //debug enabled
+    var t5 = libTranslate.getTranslationFunction(translationsObject, {debug: true});
+    it("should return @@translationKey@@ if no translation is found and debug is true", function() {
+        expect(t5('nonexistentkey')).toEqual('@@nonexistentkey@@');
+    });
+
+    it("should return @@translationKey@@ if no translation is found [namespace support]", function() {
+        expect(t5('namespaceA::namespaceB::namespaceC::nonexistentkey')).toEqual('@@namespaceA::namespaceB::namespaceC::nonexistentkey@@');
+    });
+
+
+    // it("should return ", function() {
+    //  expect(t()).toEqual();
+    // });
 });
